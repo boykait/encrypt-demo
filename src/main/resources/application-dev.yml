@@ -2,3 +2,8 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+
+secret:
+  privateKey:
+    h5: 5DQSHNPgxTAQz9HS
+    default: 8VBkO5amPcPrXV3m

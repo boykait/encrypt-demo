@@ -1,8 +1,6 @@
 package cn.boykaff.encrypt.common.utils;
 
 import org.apache.tomcat.util.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import sun.misc.BASE64Decoder;
 
@@ -116,6 +114,20 @@ public class EncryptUtils {
     }
 
     public static void main(String[] args) throws Exception {
+        String timestamp = "1648308048";
+        String salt = "123456";
+        String data = "{\n" +
+                "\t\"name\": \"boyka1\",\n" +
+                "\t\"userType\": \"VIP\"\n" +
+                "}";
+        String privateKey = "8VBkO5amPcPrXV3m";
+        String encryptData = aesEncrypt(data, privateKey);
+        System.out.println(encryptData);
+        encryptData = "fxHYvnIE54eAXDbErdrDryEsIYNvsOOkyEKYB1iBcre/QU1wMowHE2BNX/je6OP3NlsCtAeDqcp7J1N332el8r4JPvZmKlXKUUReD8ayUckrFQkSATLwASJmMTArIeit28+LbLFz9e9K0vdaRi/splThh1+7u5CDg/ixDWwVThOlZknRgP3RKar6KN7BJGFyCJYNqpYPkuapsa2B2B6DHQ==";
+        String decryptData = aesDecrypt(encryptData, privateKey);
+        System.out.println(decryptData);
+        String signature = Md5Utils.genSignature(timestamp + salt + encryptData + privateKey);
+        System.out.println(signature);
     }
 
     public static byte[] generateDesKey(int length) throws Exception {
@@ -138,5 +150,4 @@ public class EncryptUtils {
         }
         return salt;
     }
-
 }

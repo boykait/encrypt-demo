@@ -37,10 +37,10 @@ public class SecretResponseAdvice implements ResponseBodyAdvice {
     public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
         // 判断是否需要加密
         Boolean respSecret = SecretFilter.secretThreadLocal.get();
-        String secretKey = SecretFilter.clientSecretKeyThreadLocal.get();
+        String secretKey = SecretFilter.clientPrivateKeyThreadLocal.get();
         // 清理本地缓存
         SecretFilter.secretThreadLocal.remove();
-        SecretFilter.secretThreadLocal.remove();
+        SecretFilter.clientPrivateKeyThreadLocal.remove();
         if (null != respSecret && respSecret) {
             if (o instanceof ResponseBasic) {
                 // 外层加密级异常

@@ -12,13 +12,13 @@ import lombok.Getter;
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum UserType {
-    VIP(0, "VIP用户"),
-    COMMON(1, "普通用户");
-    private Integer code;
+    VIP("VIP用户"),
+    COMMON("普通用户");
+    private String code;
     private String type;
 
-    UserType(Integer code, String type) {
-        this.code = code;
+    UserType(String type) {
+        this.code = name();
         this.type = type;
     }
 }
