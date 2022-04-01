@@ -61,9 +61,8 @@ public class SecretResponseAdvice implements ResponseBodyAdvice {
                 }
                 // 业务逻辑
                 try {
-                    String dataStr = objectMapper.writeValueAsString(o);
                     // 使用FastJson序列号会导致和之前的接口响应参数不一致，后面会重点讲到
-                    String data = EncryptUtils.aesEncrypt(JSON.toJSONString(o), secretKey);
+                    String data = EncryptUtils.aesEncrypt(objectMapper.writeValueAsString(o), secretKey);
                     // 增加签名
                     long timestamp = System.currentTimeMillis() / 1000;
                     int salt = EncryptUtils.genSalt();
