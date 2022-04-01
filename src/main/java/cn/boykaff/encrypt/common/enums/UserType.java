@@ -21,4 +21,12 @@ public enum UserType {
         this.code = name();
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"code\":\"" + name() + '\"' +
+                ", \"type\":\"" + type + '\"' +
+                '}';
+    }
 }

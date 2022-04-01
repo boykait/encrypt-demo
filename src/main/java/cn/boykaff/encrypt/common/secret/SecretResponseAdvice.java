@@ -5,16 +5,26 @@ import cn.boykaff.encrypt.common.base.SecretResponseBasic;
 import cn.boykaff.encrypt.common.utils.EncryptUtils;
 import cn.boykaff.encrypt.common.utils.Md5Utils;
 import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConfiguration;
 import org.springframework.core.MethodParameter;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static cn.boykaff.encrypt.common.base.ResponseCode.SECRET_API_ERROR;
 
@@ -24,9 +34,11 @@ import static cn.boykaff.encrypt.common.base.ResponseCode.SECRET_API_ERROR;
  * @date: 2022-03-25-0025
  */
 @ControllerAdvice
-@Order(Ordered.HIGHEST_PRECEDENCE)
 public class SecretResponseAdvice implements ResponseBodyAdvice {
     private Logger logger = LoggerFactory.getLogger(SecretResponseAdvice.class);
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public boolean supports(MethodParameter methodParameter, Class aClass) {
@@ -49,6 +61,7 @@ public class SecretResponseAdvice implements ResponseBodyAdvice {
                 }
                 // 业务逻辑
                 try {
+                    String dataStr = objectMapper.writeValueAsString(o);
                     // 使用FastJson序列号会导致和之前的接口响应参数不一致，后面会重点讲到
                     String data = EncryptUtils.aesEncrypt(JSON.toJSONString(o), secretKey);
                     // 增加签名

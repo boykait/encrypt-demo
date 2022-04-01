@@ -117,8 +117,8 @@ public class EncryptUtils {
         String timestamp = "1648308048";
         String salt = "123456";
         String data = "{\n" +
-                "\t\"name\": \"boyka1\",\n" +
-                "\t\"userType\": \"VIP\"\n" +
+                "\t\"page\": 1,\n" +
+                "\t\"size\": 10\n" +
                 "}";
         String privateKey = "8VBkO5amPcPrXV3m";
         String encryptData = aesEncrypt(data, privateKey);
